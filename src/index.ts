@@ -8,3 +8,5 @@ export { useElementSize } from "./hooks/useElementSize";
 export { usePersistedChoice } from "./hooks/usePersistedChoice";
 export { usePersistedFlag } from "./hooks/usePersistedFlag";
 export { usePersistedNumber } from "./hooks/usePersistedNumber";
+export { ControlSlider } from "./components/ControlSlider";
+export { NumberField } from "./components/NumberField";
