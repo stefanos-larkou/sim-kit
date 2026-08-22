@@ -4,3 +4,4 @@ export { EMPTY_INDEX, MAX_FRAME_MS } from "./core/constants";
 export type { Pixel, Playback } from "./core/models";
 export { advanceIndex, clampIndex, lastIndex, stepIndex } from "./hooks/playback";
 export { usePlayback } from "./hooks/usePlayback";
+export { useElementSize } from "./hooks/useElementSize";
