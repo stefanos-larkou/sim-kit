@@ -128,8 +128,8 @@ follow, and both matter:
   `git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"` before it
   installs.
 
-A lockfile pins a commit SHA, so a change here reaches a consumer only when `npm install` is re-run
-there and the updated lockfile is committed.
+A lockfile pins a commit SHA, and a plain `npm install` will not move it. Reaching a consumer takes `npm update @stefanos-larkou/sim-kit` there, and the
+updated lockfile committed.
 
 ### Playback
 
