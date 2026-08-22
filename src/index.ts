@@ -5,3 +5,6 @@ export type { Pixel, Playback } from "./core/models";
 export { advanceIndex, clampIndex, lastIndex, stepIndex } from "./hooks/playback";
 export { usePlayback } from "./hooks/usePlayback";
 export { useElementSize } from "./hooks/useElementSize";
+export { usePersistedChoice } from "./hooks/usePersistedChoice";
+export { usePersistedFlag } from "./hooks/usePersistedFlag";
+export { usePersistedNumber } from "./hooks/usePersistedNumber";
