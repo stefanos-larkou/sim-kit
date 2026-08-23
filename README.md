@@ -18,6 +18,7 @@ element-size hook, persistence hooks, and the two MUI controls every one of them
   - [Playback](#playback)
   - [Controls](#controls)
   - [Persistence](#persistence)
+  - [Light or dark](#light-or-dark)
   - [Testing stubs](#testing-stubs)
   - [Peer dependencies](#peer-dependencies)
 - [Testing](#testing)
@@ -32,6 +33,7 @@ element-size hook, persistence hooks, and the two MUI controls every one of them
 | `advanceIndex`, `clampIndex`, `lastIndex`, `stepIndex` | The pure arithmetic underneath it |
 | `EMPTY_INDEX`, `MAX_FRAME_MS` | Playback's own constants |
 | `useElementSize`, `Pixel` | A `ResizeObserver` hook, so a canvas can size itself to its host |
+| `useThemeMode`, `ThemeMode` | Whether the host is showing light or dark, read from the scheme rather than the theme |
 | `usePersistedNumber`, `usePersistedChoice`, `usePersistedFlag` | A control's value, remembered between visits |
 | `withinRange`, `fraction`, `geometric` | Clamping and the two slider scales |
 | `ControlSlider`, `NumberField` | A labelled slider paired with a clamped numeric input |
@@ -186,6 +188,27 @@ const [cellCount, setCellCount] = usePersistedNumber("find-my-way:cell-count", 1
 
 The key is the consumer's, prefix and all. Anything read back is validated and clamped, because it
 may have been written by an older version or edited by hand.
+
+### Light or dark
+
+```tsx
+import { useThemeMode } from "@stefanos-larkou/sim-kit";
+
+const mode = useThemeMode();
+```
+
+**Never read `theme.palette.mode` in a consumer.** A host using MUI's CSS variables - `cssVariables`
+with `colorSchemes` - switches scheme by swapping a class on the root element and never replaces the
+theme object, so `palette.mode` is stuck at whatever it was built with. Anything drawn from it is
+then wrong in one of the two schemes and never changes when the toggle is used: light ink on a dark
+page, and no way to tell from the code that it is happening.
+
+`useThemeMode` prefers the scheme the host is actually showing, resolving `system` through
+`useColorScheme`, and falls back to `palette.mode` for a host with a plain theme. It is right under
+either kind.
+
+That fallback is also why a test must use a `cssVariables` theme to prove anything: under a plain
+theme, reading `palette.mode` directly passes just as well.
 
 ### Testing stubs
 
