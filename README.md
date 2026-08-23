@@ -14,6 +14,7 @@ element-size hook, persistence hooks, and the two MUI controls every one of them
 - [Getting started](#getting-started)
 - [Using it in an application](#using-it-in-an-application)
   - [Installing](#installing)
+  - [Seeded randomness](#seeded-randomness)
   - [Playback](#playback)
   - [Controls](#controls)
   - [Persistence](#persistence)
@@ -130,6 +131,29 @@ follow, and both matter:
 
 A lockfile pins a commit SHA, and a plain `npm install` will not move it. Reaching a consumer takes `npm update @stefanos-larkou/sim-kit` there, and the
 updated lockfile committed.
+
+### Seeded randomness
+
+```tsx
+import { createRandom } from "@stefanos-larkou/sim-kit";
+
+const random = createRandom(seed);
+```
+
+`createRandom` is a linear congruential generator, and its seed *is* its state. That has the
+consequence that **seeds that are close together do not give independent streams.**
+
+```text
+createRandom(seed + i)              every stream starts almost identically
+                                    the first draw differs by about 0.0004
+
+createRandom(master())              the same stream at a different offset,
+                                    while the distribution still looks uniform
+```
+
+Draw an entire ensemble from **one** generator, consumed linearly, rather than creating one per
+simulation from related seeds. The whole run stays reproducible from a single number, and the runs
+are genuinely independent.
 
 ### Playback
 

@@ -9,9 +9,15 @@ interface ControlSliderProps {
     step?: number | null;
     marks?: { value: number }[];
     onChange: (value: number) => void;
+    onCommit?: (value: number) => void;
 }
 
-export function ControlSlider({ label, value, min, max, step, marks, onChange }: ControlSliderProps) {
+export function ControlSlider({ label, value, min, max, step, marks, onChange, onCommit }: ControlSliderProps) {
+    const settle = (next: number) => {
+        onChange(next);
+        onCommit?.(next);
+    };
+
     return (
         <Stack direction="row" spacing={2} sx={{ alignItems: "center", width: "100%" }}>
             <Typography variant="body1" color="text.secondary" sx={{ width: 96 }}>
@@ -24,11 +30,12 @@ export function ControlSlider({ label, value, min, max, step, marks, onChange }:
                 step={step}
                 marks={marks}
                 valueLabelDisplay="auto"
-                onChange={(_, next) => onChange(next)}
+                onChange={(_event, next) => onChange(next)}
+                onChangeCommitted={(_event, next) => onCommit?.(next)}
                 aria-label={label}
                 sx={{ flex: 1 }}
             />
-            <NumberField label={label} value={value} min={min} max={max} step={step ?? 1} onChange={onChange} />
+            <NumberField label={label} value={value} min={min} max={max} step={step ?? 1} onChange={settle} />
         </Stack>
     );
 }
