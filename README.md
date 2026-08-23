@@ -151,10 +151,6 @@ createRandom(master())              the same stream at a different offset,
                                     while the distribution still looks uniform
 ```
 
-Draw an entire ensemble from **one** generator, consumed linearly, rather than creating one per
-simulation from related seeds. The whole run stays reproducible from a single number, and the runs
-are genuinely independent.
-
 ### Playback
 
 ```tsx
