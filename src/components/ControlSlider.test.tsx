@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { useState } from "react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { ControlSlider } from "./ControlSlider";
 
 function Editable({ min, max }: { min: number; max: number; }) {
@@ -9,6 +9,22 @@ function Editable({ min, max }: { min: number; max: number; }) {
 }
 
 describe("ControlSlider", () => {
+    it("reports a typed value as settled, since typing is not a drag", () => {
+        const onChange = vi.fn();
+        const onCommit = vi.fn();
+        render(<ControlSlider label="Speed" value={1} min={1} max={100} onChange={onChange} onCommit={onCommit} />);
+        fireEvent.change(screen.getByLabelText("Speed value"), { target: { value: "42" } });
+        expect(onChange).toHaveBeenCalledWith(42);
+        expect(onCommit).toHaveBeenCalledWith(42);
+    });
+
+    it("asks for nothing extra when no one is listening for a settled value", () => {
+        const onChange = vi.fn();
+        render(<ControlSlider label="Speed" value={1} min={1} max={100} onChange={onChange} />);
+        fireEvent.change(screen.getByLabelText("Speed value"), { target: { value: "42" } });
+        expect(onChange).toHaveBeenCalledWith(42);
+    });
+
     it("holds a typed value at the maximum", () => {
         render(<Editable min={1} max={100} />);
         fireEvent.change(screen.getByLabelText("Speed value"), { target: { value: "150" } });
