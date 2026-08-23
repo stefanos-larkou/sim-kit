@@ -1,6 +1,7 @@
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { IconButton, Stack, TextField } from "@mui/material";
+import { useState } from "react";
 import { withinRange } from "../core/scales";
 
 interface NumberFieldProps {
@@ -23,13 +24,35 @@ const NO_NATIVE_SPINNERS = {
 };
 
 export function NumberField({ label, value, min, max, step = 1, showLabel = false, width = 120, onChange }: NumberFieldProps) {
+    const [draft, setDraft] = useState<string | undefined>(undefined);
+
+    const edit = (text: string) => {
+        setDraft(text);
+
+        const typed = Number(text);
+        if (text !== "" && typed === withinRange(typed, min, max)) onChange(typed);
+    };
+
+    const leave = () => {
+        if (draft === undefined) return;
+
+        setDraft(undefined);
+        if (draft !== "") onChange(withinRange(Number(draft), min, max));
+    };
+
+    const nudge = (by: number) => {
+        setDraft(undefined);
+        onChange(withinRange(value + by, min, max));
+    };
+
     return (
         <TextField
             type="number"
             size="medium"
             label={showLabel ? label : undefined}
-            value={value}
-            onChange={event => onChange(withinRange(Number(event.target.value), min, max))}
+            value={draft ?? value}
+            onChange={event => edit(event.target.value)}
+            onBlur={leave}
             slotProps={{
                 htmlInput: {
                     min,
@@ -43,7 +66,7 @@ export function NumberField({ label, value, min, max, step = 1, showLabel = fals
                             <IconButton
                                 size="small"
                                 aria-label={`Increase ${label.toLowerCase()}`}
-                                onClick={() => onChange(withinRange(value + step, min, max))}
+                                onClick={() => nudge(step)}
                                 sx={{ p: 0 }}
                             >
                                 <KeyboardArrowUpIcon fontSize="small" />
@@ -51,7 +74,7 @@ export function NumberField({ label, value, min, max, step = 1, showLabel = fals
                             <IconButton
                                 size="small"
                                 aria-label={`Decrease ${label.toLowerCase()}`}
-                                onClick={() => onChange(withinRange(value - step, min, max))}
+                                onClick={() => nudge(-step)}
                                 sx={{ p: 0 }}
                             >
                                 <KeyboardArrowDownIcon fontSize="small" />

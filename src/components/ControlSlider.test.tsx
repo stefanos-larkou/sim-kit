@@ -62,15 +62,17 @@ describe("ControlSlider", () => {
         expect(onChange).toHaveBeenCalledWith(42);
     });
 
-    it("holds a typed value at the maximum", () => {
+    it("holds a typed value at the maximum once the field is left", () => {
         render(<Editable min={1} max={100} />);
-        fireEvent.change(screen.getByLabelText("Speed value"), { target: { value: "150" } });
+        type("150");
+        fireEvent.blur(screen.getByLabelText("Speed value"));
         expect(screen.getByLabelText("Speed value")).toHaveValue(100);
     });
 
-    it("holds a typed value at the minimum", () => {
+    it("holds a typed value at the minimum once the field is left", () => {
         render(<Editable min={30} max={1000} />);
-        fireEvent.change(screen.getByLabelText("Speed value"), { target: { value: "5" } });
+        type("5");
+        fireEvent.blur(screen.getByLabelText("Speed value"));
         expect(screen.getByLabelText("Speed value")).toHaveValue(30);
     });
 
