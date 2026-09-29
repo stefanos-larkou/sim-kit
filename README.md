@@ -33,7 +33,7 @@ element-size hook, persistence hooks, and the two MUI controls every one of them
 | `advanceIndex`, `clampIndex`, `lastIndex`, `stepIndex` | The pure arithmetic underneath it |
 | `EMPTY_INDEX`, `MAX_FRAME_MS` | Playback's own constants |
 | `useElementSize`, `Pixel` | A `ResizeObserver` hook, so a canvas can size itself to its host |
-| `useThemeMode`, `ThemeMode` | Whether the host is showing light or dark, read from the scheme rather than the theme |
+| `useThemeMode`, `ThemeMode` | Whether the host is showing light or dark, read from the scheme and not the theme |
 | `usePersistedNumber`, `usePersistedChoice`, `usePersistedFlag` | A control's value, remembered between visits |
 | `withinRange`, `fraction`, `geometric` | Clamping and the two slider scales |
 | `ControlSlider`, `NumberField` | A labelled slider paired with a clamped numeric input |
@@ -69,7 +69,7 @@ stepping, scrubbing and pausing are all the same operation on one number, and an
 slice away in either direction.
 
 The index starts at `-1`, meaning nothing revealed, so a run that finds nothing still visibly tries
-rather than sitting at its first event from the outset.
+before it gives up.
 
 The index advances by elapsed time multiplied by a rate, which is what decouples speed from frame
 rate. `requestAnimationFrame` fires once per display refresh, so a 60Hz screen gives a frame every
@@ -247,7 +247,7 @@ two entry files do not.
 Coverage here is worth more than coverage anywhere else: a bug in this package is a bug in every
 consumer at once, and it will be found in the consumer, where it looks like the consumer's fault.
 
-Random output is tested by its invariants rather than its value - that a seed repeats, that two
+Random output is tested by its invariants instead of its value - that a seed repeats, that two
 seeds diverge, that every value falls in `[0, 1)`. Every hook that observes, subscribes or schedules
 is tested for what it releases on unmount, because an observer that outlives its component is a leak
 a consumer inherits.

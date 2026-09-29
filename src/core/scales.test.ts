@@ -30,7 +30,7 @@ describe("geometric", () => {
         expect(geometric(1, 1, 2000)).toBeCloseTo(2000);
     });
 
-    it("puts the halfway point at the geometric mean rather than the arithmetic one", () => {
+    it("puts the halfway point at the geometric mean and not the arithmetic one", () => {
         expect(geometric(0.5, 1, 2000)).toBeCloseTo(Math.sqrt(2000));
         expect(geometric(0.5, 1, 2000)).toBeLessThan((1 + 2000) / 2);
     });
